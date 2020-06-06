@@ -341,7 +341,14 @@ export type Handler<RequestType, ResponseType> =
 
 export type HandlerType = 'bidi' | 'clientStream' | 'serverStream' | 'unary';
 
-const noopTimer: NodeJS.Timer = setTimeout(() => {}, 0);
+let noopTimer: NodeJS.Timer;
+
+function getNoopTimerSingleton(): NodeJS.Timer {
+  if (!noopTimer) {
+    noopTimer = setTimeout(() => {}, 0);
+  }
+  return noopTimer;
+}
 
 // Internal class that wraps the HTTP2 request.
 export class Http2ServerCallStream<
@@ -349,7 +356,7 @@ export class Http2ServerCallStream<
   ResponseType
 > extends EventEmitter {
   cancelled = false;
-  deadline: NodeJS.Timer = noopTimer;
+  deadline: NodeJS.Timer = getNoopTimerSingleton();
   private wantTrailers = false;
   private metadataSent = false;
   private canPush = false;
