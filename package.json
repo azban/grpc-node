@@ -1,66 +1,70 @@
 {
-  "name": "grpc-js-repository",
-  "version": "0.1.0",
-  "description": "Dummy package for the grpc-node repository",
-  "private": true,
+  "name": "@grpc/grpc-js",
+  "version": "1.0.5",
+  "description": "gRPC Library for Node - pure JS implementation",
+  "homepage": "https://grpc.io/",
+  "repository": "https://github.com/grpc/grpc-node/tree/master/packages/grpc-js",
+  "main": "build/src/index.js",
+  "engines": {
+    "node": "^8.13.0 || >=10.10.0"
+  },
   "keywords": [],
   "author": {
     "name": "Google Inc."
   },
+  "types": "build/src/index.d.ts",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/execa": "^0.8.0",
-    "@types/gulp": "^4.0.5",
-    "@types/gulp-mocha": "0.0.31",
+    "@grpc/proto-loader": "^0.5.0",
+    "@types/gulp": "^4.0.6",
+    "@types/gulp-mocha": "0.0.32",
+    "@types/lodash": "^4.14.108",
+    "@types/mocha": "^5.2.6",
     "@types/ncp": "^2.0.1",
-    "@types/node": "^8.0.32",
-    "@types/pify": "^3.0.0",
-    "@types/semver": "^5.5.0",
-    "coveralls": "^3.0.1",
-    "del": "^3.0.0",
-    "execa": "^0.8.0",
-    "gulp": "^4.0.1",
-    "gulp-jsdoc3": "^1.0.1",
-    "gulp-jshint": "^2.0.4",
-    "gulp-mocha": "^4.3.1",
-    "gulp-sourcemaps": "^2.6.1",
-    "gulp-tslint": "^8.1.1",
-    "gulp-typescript": "^3.2.2",
-    "gulp-util": "^3.0.8",
-    "jsdoc": "^3.3.2",
-    "jshint": "^2.9.5",
-    "make-dir": "^1.1.0",
-    "merge2": "^1.1.0",
-    "mocha": "^3.5.3",
-    "mocha-jenkins-reporter": "^0.3.9",
+    "@types/node": "^12.7.5",
+    "@types/pify": "^3.0.2",
+    "@types/semver": "^6.0.1",
+    "clang-format": "^1.0.55",
+    "execa": "^2.0.3",
+    "google-auth-library": "^6.0.0",
+    "gts": "^2.0.0",
+    "gulp": "^4.0.2",
+    "gulp-mocha": "^6.0.0",
+    "lodash": "^4.17.4",
+    "mocha-jenkins-reporter": "^0.4.1",
     "ncp": "^2.0.0",
-    "nyc": "^11.7.2",
-    "pify": "^3.0.0",
-    "run-sequence": "^2.2.0",
-    "semver": "^5.5.0",
-    "symlink": "^2.1.0",
-    "through2": "^2.0.3",
-    "ts-node": "^8.1.0",
-    "tslint": "^5.5.0",
-    "typescript": "^3.7.2",
-    "xml2js": "^0.4.19"
+    "pify": "^4.0.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.7.2"
   },
   "contributors": [
     {
       "name": "Google Inc."
     }
   ],
-  "nyc": {
-    "include": [
-      "packages/grpc-health-check/health.js",
-      "packages/grpc-js/build/src/*",
-      "packages/proto-loader/build/src/*"
-    ],
-    "cache": true,
-    "all": true
-  },
   "scripts": {
-    "test": "nyc gulp test",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
-  }
+    "build": "npm run compile",
+    "clean": "node -e 'require(\"rimraf\")(\"./build\", () => {})'",
+    "compile": "tsc -p .",
+    "format": "clang-format -i -style=\"{Language: JavaScript, BasedOnStyle: Google, ColumnLimit: 80}\" src/*.ts test/*.ts",
+    "lint": "npm run check",
+    "prepare": "npm run compile",
+    "test": "gulp test",
+    "check": "gts check src/**/*.ts",
+    "fix": "gts fix src/**/*.ts",
+    "pretest": "npm run compile",
+    "posttest": "npm run check"
+  },
+  "dependencies": {
+    "semver": "^6.2.0"
+  },
+  "peerDependencies": {
+    "google-auth-library": "5.x || 6.x"
+  },
+  "files": [
+    "src/*.ts",
+    "build/src/*.{js,d.ts,js.map}",
+    "LICENSE"
+  ]
 }
